@@ -22,7 +22,7 @@ module ADI
       @type       = type
       @base       = base
       @filters    = make_filter_from_hash filters
-      @attributes = compile_attributes attributes
+      @attributes = attributes
     end
 
     def first
@@ -117,43 +117,6 @@ module ADI
       options[:filter] = (options[:filter] & type.filter)
 
       options
-    end
-
-    def compile_attributes(attributes = [])
-      # Get our default attributes for our type
-      da = type.default_attributes || []
-
-      # Get any attributes for this type from the config
-      ca = config_attributes
-
-      # Get any per-call attributes
-      pa = attributes.is_a?(Array) ? attributes : []
-
-      # OR each of the arrays together to get unique entries.
-      da | ca | pa
-    end
-
-    # These are attributes options that are loaded from the config file, which
-    # can have and: attributes parameter that should be a hash, with each key
-    # being a Type with a list of string attributes to include in the LDAP
-    # search. For example:
-    #
-    #  {
-    #    ...,
-    #    attributes: {
-    #      user: [employeeid, department, title],
-    #
-    #      group: [...]
-    #    }
-    #  }
-    #
-    # If these do not exist, then each type's `default_attributes` class method
-    # should return an array of keys, and if this array is empty, then all
-    # attributes for the entry will be returned.
-    def config_attributes
-      attrs = ADI.attributes_settings_for type.class_name.downcase.to_sym
-
-      attrs.is_a?(Array) ? attrs : []
     end
 
     # Does the actual LDAP search call to DRY things up. Returns nil if there

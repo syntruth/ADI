@@ -68,8 +68,18 @@ module ADI
     end
 
     def includes(*attributes)
-      unless attributes.is_a?(Array) || attribute.empty?
-        raise ArgumentError, 'attributes argument needs to be an Array!'
+      unless attributes.is_a?(Array) || attributes.empty?
+        raise ArgumentError, '#includes needs 1 or more attributes'
+      end
+
+      @attributes = compile_attributes attributes
+
+      self
+    end
+
+    def only(*attributes)
+      unless attributes.is_a?(Array) || attributes.empty?
+        raise ArgumentError, '#only needs 1 or more attributes'
       end
 
       @attributes = attributes
@@ -77,6 +87,43 @@ module ADI
       self
     end
     ### API End
+
+    def compile_attributes(attributes = [])
+      # Get our default attributes for our type
+      da = type.default_attributes || []
+
+      # Get any attributes for this type from the config
+      ca = config_attributes
+
+      # Get any per-call attributes
+      pa = attributes.is_a?(Array) ? attributes : []
+
+      # OR each of the arrays together to get unique entries.
+      da | ca | pa
+    end
+
+    # These are attributes options that are loaded from the config file, which
+    # can have and: attributes parameter that should be a hash, with each key
+    # being a Type with a list of string attributes to include in the LDAP
+    # search. For example:
+    #
+    #  {
+    #    ...,
+    #    attributes: {
+    #      user: [employeeid, department, title],
+    #
+    #      group: [...]
+    #    }
+    #  }
+    #
+    # If these do not exist, then each type's `default_attributes` class method
+    # should return an array of keys, and if this array is empty, then all
+    # attributes for the entry will be returned.
+    def config_attributes
+      attrs = ADI.attributes_settings_for type.class_name.downcase.to_sym
+
+      attrs.is_a?(Array) ? attrs : []
+    end
 
     def call_first(&block)
       results = ADI::Finder.first type, base, filters, attributes
@@ -99,14 +146,12 @@ module ADI
     end
 
     def to_s
-      fsz  = obj_size @filters
-      asz  = obj_size @attributes
-      str  = "#{@type} :#{@specifier} filters: #{fsz} attributes: #{asz}"
-      bstr = @options[:in]
-
-      str = "#{str} #{bstr}" if bstr
-
-      str
+      format '%s [%s] filters: %s attributes: %s (%s)',
+             type,
+             specifier,
+             obj_size(filters),
+             obj_size(attributes),
+             base
     end
 
     def inspect

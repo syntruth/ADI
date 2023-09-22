@@ -197,11 +197,11 @@ module ADI
 
       return set_attr(name[0..-2], args) if name[-1] == '='
 
-      valid_attribute?(name.to_sym) ? get_attr(name) : super
+      valid_attribute?(name.to_sym) ? get_attr(name) : super(name.to_sym, args)
     end
 
     def respond_to_missing?(name)
-      valid_attribute?(name.to_sym) || super
+      valid_attribute?(name.to_sym) || super(name.to_sym)
     end
   end
 end

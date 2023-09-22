@@ -52,6 +52,25 @@ not a Hash.
 : a list of attributes to include with the query. The query will still use any
 default attributes defined by the type or in the config file.
 
+`only(<attribute, attribute, ...>)`
+: a list of attributes that should be the only attributes returned from the
+query. This will ignore any default type attributes and any attributs defined
+for the type in the config.
+
+**Note:** Be careful about trying to access attributes that were not pulled in
+the query, as they will raise a `NoMethodError` when you try to access them.
+
+```ruby
+result = ADI::User.first.where(samaccountname: 'juser')
+                  .only('department')
+                  .call
+
+result.samaccountname # Boom! NoMethodError is raised.
+```
+
+A successful result will *always* have the DN attribute, of course, as this is
+used for caching the entry.
+
 `call`
 : excute the query and either return the results, or if a block is given, pass
 the results to the block and return nil.
