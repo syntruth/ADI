@@ -7,7 +7,7 @@ page is no longer accessible.
 This is a from-the-side ground-up reworking of the code, in attempts to bring it
 up to modern Ruby standards and to make it easier to understand and extend.
 
-## Differences
+## Differences from ActiveDirectory Gem
 
 I tried to keep the `find` calling semantics the same as much as possible, with
 the ability to add which attributes that will be returned from Active Directory.
@@ -33,25 +33,30 @@ find again, which will hit the cache if its enabled.
 
 By default, the query will do a `:first` find.
 
-### API methods
+### Query API methods
 
-`in(<base string>)`: to set the Base DC for the query. Expects a String
-argument.
+`in(<base string>)`
+: to set the Base DC for the query. Expects a String argument.
 
-`for(<:first|:all>)`: expects either `:first` or `:all` as the sole argument.
+`for(<:first|:all>)`
+: expects either `:first` or `:all` as the sole argument.
 
 There are also syntactic sugar methods, `.first` and `.all` that are wrappers
 for `.for(:first)` and `.for(:all)` respectively.
 
-`where(<filters hash>)`: filters to search for. Will throw and `ArgumentError`
-if the sole argument is not a Hash.
+`where(<filters hash>)`
+: filters to search for. Will throw and `ArgumentError` if the sole argument is
+not a Hash.
 
-`includes(<attribute, attribute, ...>)`: a list of attributes to include with
-the query. The query will still use any default attributes defined by the type
-or in the config file.
+`includes(<attribute, attribute, ...>)`
+: a list of attributes to include with the query. The query will still use any
+default attributes defined by the type or in the config file.
 
-`call`: excute the query and either return the results, or if a block is given,
-pass the results to the block and return nil.
+`call`
+: excute the query and either return the results, or if a block is given, pass
+the results to the block and return nil.
+
+### Examples
 
 ```ruby
 query = ADI::User.query
@@ -91,10 +96,8 @@ displayname
 
 ## Caching
 
-Queries for membership and group membership are based on the distinguished name
-of objects. Doing a lot of queries, especially for a Rails app, is a sizable
-slowdown. To alleviate the problem, there is a very basic cache for queries
-based on an entry's `distinguishedname` value.
+Caching is implemented using a very simple Hash object, with Entry structs to
+check for invalidation.
 
 Caching is disabled by default, but can be turned on by a call to
 `ADI::Base.enable_cache`. This cache will invalidate an entry if it is older
