@@ -29,6 +29,19 @@ module ADI
       self.cache = nil
     end
 
+    # This allows for queries to skip caching.
+    #
+    # This will pause caching while executing the given block, and then unpauses
+    # the cache afterwards, returning the blocks result.
+    #
+    # If caching is not enabled, then it immediate calls the block returning the
+    # results.
+    def self.uncached(&block)
+      return block.call unless caching?
+
+      cache.pause_for(&block)
+    end
+
     # Adds an entry to the cache, however, we do so only if we are caching and
     # the object is not an instance of the Base type.
     def self.add_to_cache(entry)

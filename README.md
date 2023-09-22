@@ -57,16 +57,10 @@ default attributes defined by the type or in the config file.
 query. This will ignore any default type attributes and any attributs defined
 for the type in the config.
 
+Be aware that this will overwrite any cached entry that has the same DN!
+
 **Note:** Be careful about trying to access attributes that were not pulled in
 the query, as they will raise a `NoMethodError` when you try to access them.
-
-```ruby
-result = ADI::User.first.where(samaccountname: 'juser')
-                  .only('department')
-                  .call
-
-result.samaccountname # Boom! NoMethodError is raised.
-```
 
 A successful result will *always* have the DN attribute, of course, as this is
 used for caching the entry.
@@ -89,6 +83,15 @@ query.call { |user| puts user.title }
 ADI::Group.query.all.where(name: 'SomeGroups*').call.each do |group|
   puts group
 end
+
+# Using the .only attributes method
+result = ADI::User.first.where(samaccountname: 'juser')
+                  .only('department')
+                  .call
+
+puts result.department # This is fine.
+
+puts result.samaccountname # Boom! NoMethodError is raised.
 ```
 
 ## Attributes
@@ -127,6 +130,9 @@ process.
 
 The `timeout` and `check_interval` values can also be set in the config, under
 the `cache` value hash.
+
+If caching is enabled, and you want to perform a query and not cache the
+results, use the `.uncached` method. See examples below.
 
 ## ADI Config
 
@@ -179,7 +185,7 @@ config = {
 
 ```ruby
 # Configure the ADI library with a config, like that above.
-ADI::Base.setup(settings)
+ADI.setup(config)
 
 ### Query Interface Usage
 
@@ -218,4 +224,9 @@ ADI::Group.find(:all)
 ADI::Base.enable_cache
 ADI::Base.disable_cache
 ADI::Base.caching?
+
+# This will not cache the user result.
+user = ADI::User.uncached do
+  ADI::User.query.first.where(samaccountname: 'juser').call
+end
 ```

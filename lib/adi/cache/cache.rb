@@ -21,7 +21,30 @@ module ADI
 
     def initialize(options = {})
       @options = self.class.default_options.update(options)
+      @paused  = false
       @store   = {}
+    end
+
+    def pause!
+      @paused = true
+    end
+
+    def unpause!
+      @paused = false
+    end
+
+    def paused?
+      @paused
+    end
+
+    def pause_for(&block)
+      pause!
+
+      result = block.call
+
+      unpause
+
+      result
     end
 
     def []=(key, value)
@@ -29,7 +52,11 @@ module ADI
     end
 
     # Sets a value on the cache store.
+    #
+    # If the cache is paused, then do nothing.
     def set(key, value)
+      return if paused?
+
       @store[key] = CacheEntry.new Time.now.to_i, value
     end
 
