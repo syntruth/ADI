@@ -23,25 +23,25 @@ require_relative 'adi/field_type/member_dn_array'
 #
 # This modules is the interface with Active Directory as a whole.
 module ADI
-  # This configures the connection to Active Directory and, optionally, sets up
-  # default attribute to include when searching for entries if they are included
-  # in the config hash.
+  # This configures the connection to Active Directory and, optionally,
+  # sets up default attribute to include when searching for entries if
+  # they are included in the config hash.
   #
-  # A valid config contains at least the `server` key, which is what is passed
-  # to `Net::LDAP` to connect to the Active Directory server.
+  # A valid config contains at least the `server` key, which is what is
+  # passed to `Net::LDAP` to connect to the Active Directory server.
   #
-  # The config may also contain an `attributes` key, which defines array of
-  # keys, per entry type (User, Group, etc.) that must be returned when an entry
-  # of that type is searched for. For example, if it is desired to return the
-  # 'department' attribyte for a user, define a `:user` key with an array of
-  # `['department']` and that key will always be included when a User is loaded
-  # from Active Directory.
+  # The config may also contain an `attributes` key, which defines array
+  # of keys, per entry type (User, Group, etc.) that must be returned
+  # when an entry of that type is searched for. For example, if it is
+  # desired to return the 'department' attribyte for a user, define a
+  # `:user` key with an array of `['department']` and that key will
+  # always be included when a User is loaded from Active Directory.
   #
-  # Note: If they attribute does exist, it will not be returned and a nil result
-  # will exist in its place.
+  # Note: If they attribute does exist, it will not be returned and a
+  # nil result will exist in its place.
   #
-  # See the Net::LDAP library for configuration options for connecting to Active
-  # Directory.
+  # See the Net::LDAP library for configuration options for connecting
+  # to Active Directory.
   #
   # Example config:
   #

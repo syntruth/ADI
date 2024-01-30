@@ -3,8 +3,8 @@ module ADI
   class Base
     # This setups up the Base entry type, from which all other Types are
     # subclasses of. The two settings options, are are passed in from
-    # `ADI.setup` are `:cache` and `:attributes`, which are hashes defined in
-    # the config settings given to ADI.setup.
+    # `ADI.setup` are `:cache` and `:attributes`, which are hashes
+    # defined in the config settings given to ADI.setup.
     def self.setup(settings)
       self.cache_settings      = settings.fetch :cache,      {}
       self.attributes_settings = settings.fetch :attributes, []
@@ -12,8 +12,8 @@ module ADI
 
     # Pull the class we're in.
     #
-    # This isn't quite right, as extending the object does funny things to how
-    # we lookup objects
+    # This isn't quite right, as extending the object does funny things
+    # to how we lookup objects
     def self.class_name
       @class_name ||= name.include?('::') ? name.split('::').last : name
     end
@@ -23,14 +23,14 @@ module ADI
       ADI::Query.new self
     end
 
-    # Required Attributes for creating an entry. This should be overridden by
-    # subclasses.
+    # Required Attributes for creating an entry. This should be
+    # overridden by subclasses.
     def self.required_attributes
       {}
     end
 
-    # These are the minimum attributes to be pulled with this type, and will be
-    # modified by any :attributes key in the `#find` options.
+    # These are the minimum attributes to be pulled with this type, and
+    # will be modified by any :attributes key in the `#find` options.
     #
     # Base is an empty array, and thus will pull everything.
     def self.default_attributes
@@ -43,8 +43,9 @@ module ADI
 
     # Create a new entry in the Active Record store.
     #
-    # dn is the Distinguished Name for the new entry. This must be a unique
-    # identifier, and can be passed as either a Container or a plain string.
+    # dn is the Distinguished Name for the new entry. This must be a
+    # unique identifier, and can be passed as either a Container or a
+    # plain string.
     #
     # attributes is a symbol-keyed hash of attribute_name: value pairs.
     def self.create(dgn, attributes)

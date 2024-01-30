@@ -1,6 +1,6 @@
 module ADI
-  # The ADI::Container class represents a more malleable way of dealing with
-  # LDAP Distinguished Names (dn), like:
+  # The ADI::Container class represents a more malleable way of dealing
+  # with LDAP Distinguished Names (dn), like:
   #
   #   "cn=UserName,ou=Users,dc=example,dc=org".
   #
@@ -8,9 +8,7 @@ module ADI
   #
   #   dn = "cn=UserName,ou=Users,dc=example,dc=org"
   #
-  #   dn = ADI::Container.dc('org')
-  #                      .dc('example')
-  #                      .ou('Users')
+  #   dn = ADI::Container.dc('org') .dc('example') .ou('Users')
   #                      .cn('UserName').to_s
   class Container
     attr_reader :type

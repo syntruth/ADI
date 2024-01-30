@@ -1,9 +1,9 @@
 module ADI
-  # This defines the Finder class, which is responsible for actually talking to
-  # the LDAP/AD servers and pulling information.
+  # This defines the Finder class, which is responsible for actually
+  # talking to the LDAP/AD servers and pulling information.
   #
-  # Finder utilizes the `ADI.ldap` connection, and does not do so on its own.
-  # It's merely to encapsulate the find/search functionality.
+  # Finder utilizes the `ADI.ldap` connection, and does not do so on its
+  # own. It's merely to encapsulate the find/search functionality.
   class Finder
     attr_reader :type
     attr_reader :base
@@ -84,15 +84,16 @@ module ADI
     end
 
     def make_filter(key, value)
-      # If the value is an Array, then join the values using an OR condition
+      # If the value is an Array, then join the values using an OR
+      # condition
       if value.is_a? Array
         filter = nil
 
         value.each do |v|
           f = create_filter key, v
 
-          # If filter is not nil, then OR the additional filter, else set to the
-          # filter.
+          # If filter is not nil, then OR the additional filter, else
+          # set to the filter.
           filter = filter ? (filter |= f) : f
         end
 
@@ -119,8 +120,8 @@ module ADI
       options
     end
 
-    # Does the actual LDAP search call to DRY things up. Returns nil if there
-    # are no matches.
+    # Does the actual LDAP search call to DRY things up. Returns nil if
+    # there are no matches.
     def ldap_search(options)
       return unless ADI.connected?
 

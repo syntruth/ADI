@@ -59,8 +59,8 @@ module ADI
       DEFAULT_ATTRIBUTES
     end
 
-    # Try to authenticate the current User against Active Directory using the
-    # supplied password. Returns false upon failure.
+    # Try to authenticate the current User against Active Directory
+    # using the supplied password. Returns false upon failure.
     #
     # Authenticate can fail for a variety of reasons, primarily:
     #
@@ -68,9 +68,9 @@ module ADI
     # * The account is locked
     # * The account is disabled
     #
-    # User#locked? and User#disabled? can be used to identify the latter two
-    # cases, and if the account is enabled and unlocked, Athe password is
-    # probably invalid.
+    # User#locked? and User#disabled? can be used to identify the latter
+    # two cases, and if the account is enabled and unlocked, Athe
+    # password is probably invalid.
     def authenticate(password)
       return false if password.to_s.empty?
 
@@ -82,11 +82,11 @@ module ADI
       self.class.ldap.dup.bind_as args
     end
 
-    # Return the User's manager (another User object), depending on what is
-    # stored in the manager attribute.
+    # Return the User's manager (another User object), depending on what
+    # is stored in the manager attribute.
     #
-    # Returns nil if the schema does not include the manager attribute or if no
-    # manager has been configured.
+    # Returns nil if the schema does not include the manager attribute
+    # or if no manager has been configured.
     def manager
       return nil unless @entry.respond_to?(:manager) && !@entry.manager.nil?
 
@@ -95,15 +95,16 @@ module ADI
       cn ? User.find(:first, cn: cn.gsub(/\\/, '')) : nil
     end
 
-    # Returns an array of Group objects that this User belongs to. Only the
-    # immediate parent groups are returned, so if the user Sally is in a group
-    # called Sales, and Sales is in a group called Marketing, this method would
-    # only return the Sales group.
+    # Returns an array of Group objects that this User belongs to. Only
+    # the immediate parent groups are returned, so if the user Sally is
+    # in a group called Sales, and Sales is in a group called Marketing,
+    # this method would only return the Sales group.
     def groups
       @groups ||= Group.find(:all, distinguishedname: @entry.memberOf)
     end
 
-    # Returns an array of User objects that have this User as their manager.
+    # Returns an array of User objects that have this User as their
+    # manager.
     def direct_reports
       return [] unless @entry.respond_to?(:directReports) &&
                        !@entry.directReports.nil?
@@ -117,8 +118,8 @@ module ADI
       @direct_reports ||= User.find(:all, cn: cns)
     end
 
-    # Returns true if this account has been locked out (usually because of too
-    # many invalid authentication attempts).
+    # Returns true if this account has been locked out (usually because
+    # of too many invalid authentication attempts).
     #
     # Locked accounts can be unlocked with the User#unlock! method.
     def locked?
@@ -132,20 +133,21 @@ module ADI
       userAccountControl.to_i & UAC_ACCOUNT_DISABLED != 0
     end
 
-    # Returns true if the user should be able to log in with a correct password
-    # (essentially, their account is not disabled or locked out).
+    # Returns true if the user should be able to log in with a correct
+    # password (essentially, their account is not disabled or locked
+    # out).
     def can_login?
       !disabled? && !locked?
     end
 
     # Change the password for this account.
     #
-    # This operation requires that the bind user specified in Base.setup have
-    # heightened privileges. It also requires an SSL connection.
+    # This operation requires that the bind user specified in Base.setup
+    # have heightened privileges. It also requires an SSL connection.
     #
-    # If the force_change argument is passed as true, the password will be
-    # marked as 'expired', forcing the user to change it the next time they
-    # successfully log into the domain.
+    # If the force_change argument is passed as true, the password will
+    # be marked as 'expired', forcing the user to change it the next
+    # time they successfully log into the domain.
     def change_password(new_password, force_change = false)
       settings = self.class.settings.dup
 

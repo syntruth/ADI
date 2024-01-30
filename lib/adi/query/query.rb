@@ -1,7 +1,7 @@
 # This API is to enable a more object oriented query DSL.
 module ADI
-  # This models a Query, that can be programatically chained before doing an
-  # actual find in Active Directory.
+  # This models a Query, that can be programatically chained before
+  # doing an actual find in Active Directory.
   class Query
     attr_reader :type
     attr_reader :specifier

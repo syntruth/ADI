@@ -1,5 +1,11 @@
 # ADI Library
 
+## Version 1.0.3
+
+- FIX: issue in `ADI::Base#find_cached_results_array` use of
+  `filter_map`.
+- Code and Comments clean up. Wrap text to 72 characters.
+
 ## Version 1.0.2
 
 - Implement Uncached Queries

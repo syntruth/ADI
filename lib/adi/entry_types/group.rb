@@ -20,25 +20,25 @@ module ADI
       super
     end
 
-    # Returns true if the passed User or Group object belongs to this group. For
-    # performance reasons, the check is handled by the User or Group object
-    # passed.
+    # Returns true if the passed User or Group object belongs to this
+    # group. For performance reasons, the check is handled by the User
+    # or Group object passed.
     def member?(user)
       user.member_of?(self)
     end
 
-    # Add the passed User or Group object to this Group. Returns true if the
-    # User or Group is already a member of the group, or if the operation to add
-    # them succeeds.
+    # Add the passed User or Group object to this Group. Returns true if
+    # the User or Group is already a member of the group, or if the
+    # operation to add them succeeds.
     def add(member)
       return false unless member.is_a?(User) || member.is_a?(Group)
 
       group_modify(:add) ? true : member?(member)
     end
 
-    # Remove a User or Group from this Group. Returns true if the User or Group
-    # does not belong to this Group, or if the oepration to remove them
-    # succeeds.
+    # Remove a User or Group from this Group. Returns true if the User
+    # or Group does not belong to this Group, or if the oepration to
+    # remove them succeeds.
     def remove(member)
       return false unless member.is_a?(User) || member.is_a?(Group)
 
@@ -64,11 +64,11 @@ module ADI
 
     # Returns an array of all User objects that belong to this group.
     #
-    # If the recursive argument is false, then only Users who belong explicitly
-    # to this Group are returned.
+    # If the recursive argument is false, then only Users who belong
+    # explicitly to this Group are returned.
     #
-    # If the recursive argument is true, then all Users who belong to this
-    # Group, or any of its subgroups, are returned.
+    # If the recursive argument is true, then all Users who belong to
+    # this Group, or any of its subgroups, are returned.
     def member_users(recursive = false)
       @member_users = users_find @entry.member
 
@@ -84,8 +84,8 @@ module ADI
     # If the recursive argument is false, then only Groups that belong
     # explicitly to this Group are returned.
     #
-    # If the recursive argument is true, then all Groups that belong to this
-    # Group, or any of its subgroups, are returned.
+    # If the recursive argument is true, then all Groups that belong to
+    # this Group, or any of its subgroups, are returned.
     def member_groups(recursive = false)
       @member_groups ||= groups_find(@entry.member)
 

@@ -19,8 +19,8 @@ module ADI
       @entry.nil?
     end
 
-    # Refreshes the attributes for the entry with updated data from the domain
-    # controller.
+    # Refreshes the attributes for the entry with updated data from the
+    # domain controller.
     def reload
       return false if new_record?
 
@@ -30,17 +30,19 @@ module ADI
       !@entry.nil?
     end
 
-    # Updates a single attribute (name) with one or more values, by immediately
-    # contacting the Active Directory server and initiating the update remotely.
+    # Updates a single attribute (name) with one or more values, by
+    # immediately contacting the Active Directory server and initiating
+    # the update remotely.
     #
-    # Entries are always reloaded via Base.reload after calling this method.
+    # Entries are always reloaded via Base.reload after calling this
+    # method.
     def update_attribute(name, value)
       update_attributes(name.to_s => value)
     end
 
     # Updates multiple attributes, like ActiveRecord#update_attributes.
-    # The updates are immediately sent to the server for processing,
-    # and the entry is reloaded after the update (if all went well).
+    # The updates are immediately sent to the server for processing, and
+    # the entry is reloaded after the update (if all went well).
     def update_attributes(attributes_to_update)
       return true if attributes_to_update.empty?
 
@@ -81,8 +83,8 @@ module ADI
       nil
     end
 
-    # Deletes the entry from the Active Record store and returns true if the
-    # operation was successfully.
+    # Deletes the entry from the Active Record store and returns true if
+    # the operation was successfully.
     def destroy
       return false if new_record?
 
@@ -94,7 +96,8 @@ module ADI
       true
     end
 
-    # Saves any pending changes to the entry by updating the remote entry.
+    # Saves any pending changes to the entry by updating the remote
+    # entry.
     def save
       return false unless update_attributes @attributes
 
@@ -103,10 +106,11 @@ module ADI
       true
     end
 
-    # This method may one day provide the ability to move entries from container
-    # to container. Currently, it does nothing, as we are waiting on the
-    # Net::LDAP folks to either document the Net::LDAP#modrdn method, or provide
-    # a similar method for moving / renaming LDAP entries.
+    # This method may one day provide the ability to move entries from
+    # container to container. Currently, it does nothing, as we are
+    # waiting on the Net::LDAP folks to either document the
+    # Net::LDAP#modrdn method, or provide a similar method for
+    # moving/renaming LDAP entries.
     def move(_new_rdn)
       false
 
@@ -174,13 +178,12 @@ module ADI
       @attributes[name.to_sym] = encode_field name, value
     end
 
-    # Reads the array of values for the provided attribute. The attribute name
-    # is canonicalized prior to reading. Returns an empty array if the
-    # attribute does not exist.
+    # Reads the array of values for the provided attribute. The
+    # attribute name is canonicalized prior to reading. Returns an empty
+    # array if the attribute does not exist.
     alias [] get_attr
     alias []= set_attr
 
-    ##
     # Weird fluke with flattening, probably because of above attribute
     def to_ary; end
 

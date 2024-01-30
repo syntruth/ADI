@@ -13,7 +13,8 @@ module ADI
 
     # Enable caching for queries against the DN only
     #
-    # This is to prevent membership lookups from hitting the AD unnecessarilly
+    # This is to prevent membership lookups from hitting the AD server
+    # unnecessarilly
     def self.enable_cache
       return if cache
 
@@ -31,19 +32,19 @@ module ADI
 
     # This allows for queries to skip caching.
     #
-    # This will pause caching while executing the given block, and then unpauses
-    # the cache afterwards, returning the blocks result.
+    # This will pause caching while executing the given block, and then
+    # unpauses the cache afterwards, returning the blocks result.
     #
-    # If caching is not enabled, then it immediate calls the block returning the
-    # results.
+    # If caching is not enabled, then it immediate calls the block
+    # returning the results.
     def self.uncached(&block)
       return block.call unless caching?
 
       cache.pause_for(&block)
     end
 
-    # Adds an entry to the cache, however, we do so only if we are caching and
-    # the object is not an instance of the Base type.
+    # Adds an entry to the cache, however, we do so only if we are
+    # caching and the object is not an instance of the Base type.
     def self.add_to_cache(entry)
       cache[entry.dn] = entry if caching? && !entry.class.class_name != 'Base'
 
@@ -78,9 +79,7 @@ module ADI
         entry = cache[dn]
 
         # Only return entries of the type that we're looking for.
-        return false unless entry && entry.is_a(self)
-
-        entry
+        entry if entry.is_a(self)
       end
     end
   end
