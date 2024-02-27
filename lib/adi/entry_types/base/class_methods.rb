@@ -3,8 +3,8 @@ module ADI
   class Base
     # This setups up the Base entry type, from which all other Types are
     # subclasses of. The two settings options, are are passed in from
-    # `ADI.setup` are `:cache` and `:attributes`, which are hashes
-    # defined in the config settings given to ADI.setup.
+    # `ADI.setup` are the `:cache` hash and `:attributes` array, which
+    # are defined in the config settings given to ADI.setup.
     def self.setup(settings)
       self.cache_settings      = settings.fetch :cache,      {}
       self.attributes_settings = settings.fetch :attributes, []
@@ -26,6 +26,8 @@ module ADI
     # Required Attributes for creating an entry. This should be
     # overridden by subclasses.
     def self.required_attributes
+      warn `Base.required_attributes should be overridden!`
+
       {}
     end
 
@@ -41,13 +43,14 @@ module ADI
       NIL_FILTER
     end
 
-    # Create a new entry in the Active Record store.
+    # Create a new entry in the Active Directory store.
     #
     # dn is the Distinguished Name for the new entry. This must be a
     # unique identifier, and can be passed as either a Container or a
     # plain string.
     #
-    # attributes is a symbol-keyed hash of attribute_name: value pairs.
+    # attributes is a symbol-keyed hash of attribute name => value
+    # pairs.
     def self.create(dgn, attributes)
       return nil if dgn.nil? || attributes.nil?
 
@@ -65,6 +68,8 @@ module ADI
     end
 
     # Performs a search on the Active Directory store.
+    #
+    # NOTE: This is now simply syntactic sugar for the query API.
     def self.find(specifier, params = {}, attributes = [])
       query.for(specifier).where(params).includes(attributes).call
     end

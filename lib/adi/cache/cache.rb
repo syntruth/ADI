@@ -6,12 +6,12 @@ module ADI
     CacheEntry = Struct.new :time, :value
 
     # Valid Options are:
-    #   - timeout: how long, in seconds, before and entry in invalid and
+    #   - timeout: how long, in seconds, before an entry is invalid and
     #     removed.
     #
-    #   - check_interval: how often, in seconds, that the cache will check for
-    #     invalid entries and remove them. This is actually only checked when a
-    #     key is checked for invalidity.
+    #   - check_interval: how often, in seconds, that the cache will
+    #     check for invalid entries and remove them. This is actually
+    #     only checked when a key is checked for invalidity.
     def self.default_options
       {
         timeout:        300,
@@ -42,7 +42,7 @@ module ADI
 
       result = block.call
 
-      unpause
+      unpause!
 
       result
     end
@@ -69,19 +69,14 @@ module ADI
 
       value = @store[key]
 
-      if block_given?
-        block.call @store[key]
+      return value unless block_given?
 
-        return
-      end
-
-      value
+      # Enforce a nil return if a block is used.
+      block.call(value) && nil
     end
 
     def remove(key)
       @store.delete key
-
-      nil
     end
 
     def clear!

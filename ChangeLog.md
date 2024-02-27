@@ -1,5 +1,10 @@
 # ADI Library
 
+## Version 1.0.4
+
+- FIX: Caching issues/typos.
+- Even more clean-up.
+
 ## Version 1.0.3
 
 - FIX: issue in `ADI::Base#find_cached_results_array` use of

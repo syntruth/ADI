@@ -45,7 +45,7 @@ module ADI
   #
   # Example config:
   #
-  # {
+  # config = {
   #   server: {
   #     host: 'ad-server.example.org',
   #     port: 389,

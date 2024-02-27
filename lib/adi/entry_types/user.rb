@@ -25,7 +25,7 @@ module ADI
     # of the authentication succeeded.
     def self.authenticate(username, pwd)
       # This will try and establish a connection if one is not already set.
-      return unless ADI.connected?
+      return nil unless ADI.connected?
 
       # If the password is not a string or has no length, bail out.
       return nil unless pwd.is_a?(String) && pwd.size.positive?

@@ -74,7 +74,7 @@ module ADI
 
       op = currenty.nil? ? :add : :replace
 
-      [op, attr, values]
+      [op, attr, value]
     end
 
     def entry_attribute(attribute)
@@ -83,8 +83,8 @@ module ADI
       nil
     end
 
-    # Deletes the entry from the Active Record store and returns true if
-    # the operation was successfully.
+    # Deletes the entry from the Active Directory store and returns true
+    # if the operation was successfully.
     def destroy
       return false if new_record?
 
